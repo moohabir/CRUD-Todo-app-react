@@ -1,0 +1,23 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.tasks {
+  font-size: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  height: 100px;
+  width: 350px;
+  margin-left: 32%;
+  width: 300px;
+  margin-top: 10px;
+  text-align: center;
+  background-color: blueviolet;
+}
+@media screen and(max-width:768px) {
+  .app,
+  .tasks {
+    display: flex;
+    flex-direction: column;
+  }
+}
