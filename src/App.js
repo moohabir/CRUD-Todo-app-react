@@ -29,6 +29,9 @@ export default function App() {
       <button type="submit" onClick={addTasks}>
         Add todo
       </button>
+      <button type="reset" onClick={() => setTaskList([])}>
+        Reset
+      </button>
       {taskList.map((task) => (
         <Tasks taskname={task.task} time={task.time} />
       ))}
