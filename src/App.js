@@ -26,7 +26,7 @@ export default function App() {
         value={time}
         onChange={(e) => setTime(e.target.value)}
       />
-      <button type="submit" onClick={addTasks}>
+      <button disabled={!taskname} type="submit" onClick={addTasks}>
         Add todo
       </button>
       <button type="reset" onClick={() => setTaskList([])}>
