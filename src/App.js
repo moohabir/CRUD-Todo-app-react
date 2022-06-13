@@ -1,26 +1,40 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
 import Tasks from "./components/Tasks";
-import db from "./firebase";
+import { db } from "./firebase";
+import { collection, getDocs, addDoc } from "firebase/firestore";
 
 export default function App() {
   const [taskname, setTaskname] = useState("");
   const [time, setTime] = useState("");
   const [taskList, setTaskList] = useState([]);
 
+  const usersCollectionRef = collection(db, "todos");
+
+  const addTodo = async () => {
+    await addDoc(usersCollectionRef, { taskname: taskname, time: time });
+  };
+
   //below is about fetch and listen data from database when app loads
   //when add new todos or removed
   useEffect(() => {
-    db.collection("todos").onSnapshot((snapshot) => {
-      setTaskList(snapshot.docs.map((doc) => doc.data().todo));
-    });
+    const getUsers = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setTaskList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      console.log(data);
+    };
+    getUsers();
   }, []);
 
-  const addTasks = () => {
-    setTaskList([...taskList, { task: taskname, time: time }]);
-    setTaskname("");
-    setTime("");
-  };
+  //const addTasks = (e) => {
+  //e.preventDefault();
+  // db.collection("todos").add({
+  //  todo: taskname
+  // });
+  //setTaskList([...taskList, { task: taskname, time: time }]);
+  //setTaskname("");
+  //setTime("");
+  //};
 
   return (
     <div className="App">
@@ -35,14 +49,16 @@ export default function App() {
         value={time}
         onChange={(e) => setTime(e.target.value)}
       />
-      <button disabled={!taskname} type="submit" onClick={addTasks}>
+      <button disabled={!taskname} type="submit" onClick={addTodo}>
         Add todo
       </button>
       <button type="reset" onClick={() => setTaskList([])}>
         Reset
       </button>
-      {taskList.map((task) => (
-        <Tasks taskname={task.task} time={task.time} />
+      {taskList.map((task, index) => (
+        <div key={index}>
+          <Tasks taskname={task.taskname} time={task.time} />
+        </div>
       ))}
     </div>
   );
