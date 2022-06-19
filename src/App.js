@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import "./styles.css";
 import Tasks from "./components/Tasks";
 import { db } from "./firebase";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc
+} from "firebase/firestore";
 
 export default function App() {
   const [taskname, setTaskname] = useState("");
@@ -17,6 +24,8 @@ export default function App() {
 
   //below is about fetch and listen data from database when app loads
   //when add new todos or removed
+  // lkn waxaan u baahnahay onSnapshot inaan fahmo si automatic u
+  //noqoto shaqada
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);
@@ -35,6 +44,20 @@ export default function App() {
   //setTaskname("");
   //setTime("");
   //};
+
+  //qaybtaan hoose waa qaabka update lkn waxaan
+  //sii baari doona sidaan ugu salayn lahaa
+  //databasekayga firesote ee todos kaas oo leh laba string
+  //const updateTodo = async (id, age) => {
+  //const userDoc = doc(db, "todos", id);
+  //newFields = { age: age + 1 };
+  //await updateDoc(userDoc, newFields);
+  // };
+
+  const deleteTodo = async (id) => {
+    const userDoc = doc(db, "todos", id);
+    await deleteDoc(userDoc);
+  };
 
   return (
     <div className="App">
@@ -58,6 +81,10 @@ export default function App() {
       {taskList.map((task, index) => (
         <div key={index}>
           <Tasks taskname={task.taskname} time={task.time} />
+          <button onClick={() => deleteTodo(task.id)}>Delete Todo</button>
+          <button onClick={() => updateTodo(task.id, task.age)}>
+            update Todo
+          </button>
         </div>
       ))}
     </div>
