@@ -18,10 +18,6 @@ export default function App() {
 
   const usersCollectionRef = collection(db, "todos");
 
-  const addTodo = async () => {
-    await addDoc(usersCollectionRef, { taskname: taskname, time: time });
-  };
-
   //below is about fetch and listen data from database when app loads
   //when add new todos or removed
   // lkn waxaan u baahnahay onSnapshot inaan fahmo si automatic u
@@ -34,6 +30,10 @@ export default function App() {
     };
     getUsers();
   }, []);
+
+  const addTodo = async () => {
+    await addDoc(usersCollectionRef, { taskname: taskname, time: time });
+  };
 
   //const addTasks = (e) => {
   //e.preventDefault();
