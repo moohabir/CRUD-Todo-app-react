@@ -6,9 +6,10 @@ import {
   collection,
   getDocs,
   addDoc,
-  updateDoc,
+  //updateDoc,
   deleteDoc,
   doc
+  //onSnapshot
 } from "firebase/firestore";
 
 export default function App() {
