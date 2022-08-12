@@ -8,8 +8,8 @@ import {
   addDoc,
   //updateDoc,
   deleteDoc,
-  doc
-  //onSnapshot
+  doc,
+  onSnapshot
 } from "firebase/firestore";
 
 export default function App() {
@@ -23,14 +23,13 @@ export default function App() {
   //when add new todos or removed
   // lkn waxaan u baahnahay onSnapshot inaan fahmo si automatic u
   //noqoto shaqada
-  useEffect(() => {
-    const getUsers = async () => {
-      const data = await getDocs(usersCollectionRef);
-      setTaskList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      console.log(data);
-    };
-    getUsers();
-  }, []);
+  useEffect(
+    () =>
+      onSnapshot(collection(db, "todos"), (snapshot) =>
+        setTaskList(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      ),
+    []
+  );
 
   const addTodo = async () => {
     await addDoc(usersCollectionRef, { taskname: taskname, time: time });
@@ -65,11 +64,13 @@ export default function App() {
       <h1>Todos</h1>
       <input
         type="text"
+        placeholder="Write task"
         value={taskname}
         onChange={(e) => setTaskname(e.target.value)}
       />
       <input
         type="text"
+        placeholder="time to complete task"
         value={time}
         onChange={(e) => setTime(e.target.value)}
       />
